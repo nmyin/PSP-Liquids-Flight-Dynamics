@@ -12,9 +12,21 @@ function TennisRacket()
     
     RotationsVisualizer(x_f(:, 4:7), t.', 1)
     
+    energy = [];
+
+    for i = 1:length(x_f(:, 1))
+        energy = [energy; 0.5*(ix*x_f(i, 1)^2+iy*x_f(i, 2)^2+iz*x_f(i, 3)^2)];
+    end
+    
     function x_dot = my_ode(t, x)
         w_dot = [(iy-iz)*x(2)*x(3)/ix; (iz-ix)*x(1)*x(3)/iy; (ix-iy)*x(1)*x(2)/iz];
         q_dot = 1/2*[0 -1*x(1) -1*x(2) -1*x(3); x(1) 0 x(3) -1*x(2); x(2) -1*x(3) 0 x(1); x(3) x(2) -1*x(1) 0]*x(4:7);
         x_dot = [w_dot;q_dot];
     end
+    
+    figure(1);
+    plot(t, energy);
+    xlabel('Time (s)');
+    ylabel('Rotational Energy (J)');
+    title('Rotational Energy of Tennis Racket over Time');
 end
